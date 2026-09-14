@@ -9,7 +9,6 @@ local refillInterval = tonumber(ARGV[2])
 local tokenCount
 local lastRefill
 
--- Initialize bucket
 if redis.call("EXISTS", KEYS[1]) == 0 then
     tokenCount = bucketSize
     lastRefill = now
@@ -17,7 +16,6 @@ else
     tokenCount = tonumber(redis.call("HGET", KEYS[1], "Count"))
     lastRefill = tonumber(redis.call("HGET", KEYS[1], "LastRefill"))
 
-    -- Calculate how many tokens should have been refilled
     local elapsed = now - lastRefill
     local tokensToAdd = math.floor(elapsed / refillInterval)
 
